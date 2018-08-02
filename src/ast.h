@@ -70,6 +70,14 @@ namespace yasc {
             val_ += rhs.get();
             return *this;
         }
+
+        Numeric<T> operator-(Numeric<T> const& rhs) {
+            return Numeric(val_ - rhs.get());
+        }
+        Numeric<T> operator-=(Numeric<T> const& rhs) {
+            val_ -= rhs.get();
+            return *this;
+        }
     private:
         T val_;
     };
