@@ -1,7 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "ast.h"
 #include "parse.h"
+
+#include "ast/list.h"
+#include "ast/literal.h"
+#include "ast/value.h"
+#include "libscheme/arithmetic.h"
+#include "evaluate.h"
 
 template<class T>
 typename yasc::Numeric<T>::SPtr astPlusHelper(T&& sum) {
@@ -13,7 +18,7 @@ typename yasc::Numeric<T>::SPtr astPlusHelper(T&& acc, Ts&&...nums) {
     auto lhs = yasc::make_value<yasc::Numeric<T>>(acc);
     auto rhs = astPlusHelper(std::forward<Ts>(nums)...);
     auto summands = std::vector<yasc::Value>{lhs, rhs};
-    auto expr = yasc::make_value<yasc::List>(yasc::make_value<Plus<T>>(), summands);
+    auto expr = yasc::make_value<yasc::List>(yasc::make_value<yasc::Plus<T>>(), summands);
     auto result = std::get<yasc::Literal::SPtr>(yasc::evaluate(expr));
     return std::static_pointer_cast<yasc::Numeric<T>>(result);
 }
@@ -21,26 +26,6 @@ typename yasc::Numeric<T>::SPtr astPlusHelper(T&& acc, Ts&&...nums) {
 template<class T, class...Ts>
 T astPlus(T&& acc, Ts&&...nums) {
     return astPlusHelper(std::forward<T>(acc), std::forward<Ts>(nums)...)->get();
-}
-
-template<class T>
-typename yasc::Numeric<T>::SPtr astMinusHelper(T&& sum) {
-    return std::make_shared<yasc::Numeric<T>>(sum);
-}
-
-template<class T, class...Ts>
-typename yasc::Numeric<T>::SPtr astMinusHelper(T&& acc, Ts&&...nums) {
-    auto lhs = yasc::make_value<yasc::Numeric<T>>(acc);
-    auto rhs = astPlusHelper(std::forward<Ts>(nums)...);
-    auto summands = std::vector<yasc::Value>{lhs, rhs};
-    auto expr = yasc::make_value<yasc::List>(yasc::make_value<Minus<T>>(), summands);
-    auto result = std::get<yasc::Literal::SPtr>(yasc::evaluate(expr));
-    return std::static_pointer_cast<yasc::Numeric<T>>(result);
-}
-
-template<class T, class...Ts>
-T astMinus(T&& acc, Ts&&...nums) {
-    return astMinusHelper(std::forward<T>(acc), std::forward<Ts>(nums)...)->get();
 }
 
 TEST(astAddition, binary) {

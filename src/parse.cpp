@@ -3,6 +3,12 @@
 #include <cassert>
 
 #include "parse.h"
+#include "ast/list.h"
+#include "ast/literal.h"
+#include "ast/value.h"
+#include "ast/identifier.h"
+
+#include "libscheme/arithmetic.h"
 
 namespace {
     std::string get_token(std::string const& prog, std::string::iterator& itr) {
@@ -26,8 +32,8 @@ namespace {
                         break;
                     }
                 case ')': return list;
-                case '+': 
-                    list = std::make_shared<yasc::List>(yasc::make_value<yasc::Identifier>("+", yasc::make_value<Plus<int>>()));
+                case '+':
+                    list = std::make_shared<yasc::List>(yasc::make_value<yasc::Identifier>("+", yasc::make_value<yasc::Plus<int>>()));
                     break;
                 case ' ': break;
                 default:

@@ -3,6 +3,7 @@
 #include <variant>
 
 #include "parse.h"
+#include "evaluate.h"
 
 int main() {
     using namespace yasc;

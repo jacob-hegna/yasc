@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "ast.h"
+#include "ast/list.h"
 
 namespace yasc {
     std::shared_ptr<List> parse(std::string prog);
