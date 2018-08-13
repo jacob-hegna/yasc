@@ -3,16 +3,16 @@
 
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "value.h"
 
 namespace yasc {
-    class Identifier {
+    class Identifier : public Value {
     public:
-        using Ptr = std::unique_ptr<Identifier>;
-        using SPtr = std::shared_ptr<Identifier>;
-        Identifier(std::string id, Value val)
-            : id_(std::move(id))
+        Identifier(std::string id, Value::Ptr val)
+            : Value(Value::Type::Identifier)
+            , id_(std::move(id))
             , val_(std::move(val))
         {}
 
@@ -20,8 +20,8 @@ namespace yasc {
             return id_;
         }
 
-        Value val() const {
-            return val_;
+        Value* val() {
+            return val_.get();
         }
 
         bool operator==(std::string const& rhs) {
@@ -32,9 +32,14 @@ namespace yasc {
             return id_ == rhs.id();
         }
 
+        std::ostream& print(std::ostream& o) const override {
+            o << id();
+            return o;
+        }
+
     private:
         std::string id_;
-        Value val_;
+        Value::Ptr val_;
     };
 } // end of namespace yasc
 
