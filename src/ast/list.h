@@ -1,6 +1,7 @@
 #ifndef __YASC_AST_LIST_H_
 #define __YASC_AST_LIST_H_
 
+#include <cassert>
 #include <numeric>
 #include <memory>
 #include <iostream>

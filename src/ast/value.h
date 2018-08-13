@@ -1,7 +1,9 @@
 #ifndef __YASC_AST_VALUE_H_
 #define __YASC_AST_VALUE_H_
 
+#include <cassert>
 #include <type_traits>
+#include <memory>
 
 #include "number_fwd.h"
 
